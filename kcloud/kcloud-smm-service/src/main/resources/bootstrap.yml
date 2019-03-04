@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: kcloud-smm-service
+  profiles:
+    active: dev
+  cloud:
+    config:
+      fail-fast: true
+      discovery:
+        service-id: kcloud-config
+        enabled: true
+      profile: ${spring.profiles.active}
+      label: ${spring.profiles.active}
+ 
+---
+spring:
+  profiles: dev
+eureka:
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 20
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8020/eureka/ 

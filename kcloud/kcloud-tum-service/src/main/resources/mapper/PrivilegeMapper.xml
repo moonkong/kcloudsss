@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcloud.tum.mapper.PrivilegeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kcloud.tum.model.entity.Privilege">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="parentId" property="parentId" />
+        <result column="grade" property="grade" />
+        <result column="code" property="code" />
+        <result column="create_time" property="createTime" />
+        <result column="modify_time" property="modifyTime" />
+        <result column="authority" property="authority" />
+    </resultMap>
+    
+	<sql id="Base_Column_List">
+		t1.id, t1.authority 
+	</sql>
+
+<select id="findPrivilegesByUserid"   resultType="java.lang.String"   parameterType="java.lang.Long">
+		select 
+		 t1.authority 
+		from t_privilege t1 ,t_role_privilege t2,t_user_role t3
+		where t1.id=t2.privilegeid
+    	and t2.roleid=t3.roleid
+		and t3.userid= #{userid} 
+	</select>
+	
+	
+	<select id="findPrivilegesPage"   resultMap="BaseResultMap"   parameterType="map">
+		select 
+		*
+		from t_privilege  
+		<where>
+        	<if test="rolename!=null">
+             	and name LIKE CONCAT('%',#{rolename},'%')
+       		 </if>
+             <if test="code!=null">
+                 and code LIKE '%' #{code} '%'
+             </if> 
+       </where> 
+	</select>
+</mapper>
